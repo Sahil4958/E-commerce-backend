@@ -23,7 +23,7 @@ export const loginUserController = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const result = await loginUserService(email, password)
+    const result = await loginUserService(email, password);
 
     apiResponse(res, StatusCodes.OK, messages.USER_LOGIN_SUCCESS, result);
   } catch (error) {

@@ -14,8 +14,15 @@ export const getMyCart = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
     const cart = await getCartByUserService(userId);
-    return apiResponse(res, StatusCodes.OK, "Cart fetched", cart ?? { items: [] });
-  } catch (e) { handleError(res, e); }
+    return apiResponse(
+      res,
+      StatusCodes.OK,
+      "Cart fetched",
+      cart ?? { items: [] }
+    );
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const addToCart = async (req: Request, res: Response) => {
@@ -24,7 +31,9 @@ export const addToCart = async (req: Request, res: Response) => {
     const { productId, qty } = req.body as { productId: string; qty?: number };
     const cart = await addToCartService(userId, productId, Number(qty ?? 1));
     return apiResponse(res, StatusCodes.OK, "Item added to cart", cart);
-  } catch (e) { handleError(res, e); }
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const updateCartItemQty = async (req: Request, res: Response) => {
@@ -33,7 +42,9 @@ export const updateCartItemQty = async (req: Request, res: Response) => {
     const { productId, qty } = req.body as { productId: string; qty: number };
     const cart = await updateCartItemQtyService(userId, productId, Number(qty));
     return apiResponse(res, StatusCodes.OK, "Cart updated", cart);
-  } catch (e) { handleError(res, e); }
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const removeFromCart = async (req: Request, res: Response) => {
@@ -42,7 +53,9 @@ export const removeFromCart = async (req: Request, res: Response) => {
     const { productId } = req.body as { productId: string };
     const cart = await removeFromCartService(userId, productId);
     return apiResponse(res, StatusCodes.OK, "Item removed from cart", cart);
-  } catch (e) { handleError(res, e); }
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const clearCart = async (req: Request, res: Response) => {
@@ -50,5 +63,7 @@ export const clearCart = async (req: Request, res: Response) => {
     const userId = (req as any).user.id;
     const cart = await clearCartService(userId);
     return apiResponse(res, StatusCodes.OK, "Cart cleared", cart);
-  } catch (e) { handleError(res, e); }
+  } catch (error) {
+    handleError(res, error);
+  }
 };

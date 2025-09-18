@@ -10,21 +10,28 @@ const computeExpectedDelivery = (shippingMethod?: "standard" | "express") => {
   return d;
 };
 
-
 export const checkoutFromCartService = async (
   userId: string,
-  extra: { address?: any; shippingMethod?: "standard" | "express"; notes?: string }
+  extra: {
+    address?: any;
+    shippingMethod?: "standard" | "express";
+    notes?: string;
+  }
 ): Promise<IOrderModel> => {
   if (!Types.ObjectId.isValid(userId)) throw new Error("Invalid user id");
 
   const cart = await Cart.findOne({ user: userId });
   if (!cart || cart.items.length === 0) throw new Error("Cart is empty");
 
-  const items: Array<{ product: Types.ObjectId; qty: number; price: number }> = [];
+  const items: Array<{ product: Types.ObjectId; qty: number; price: number }> =
+    [];
   let total = 0;
 
   for (const it of cart.items) {
-    const prod = await Product.findOne({ _id: it.product, isDeleted: { $ne: true } });
+    const prod = await Product.findOne({
+      _id: it.product,
+      isDeleted: { $ne: true },
+    });
     if (!prod) throw new Error("Product not found or deleted");
     const price = prod.price;
     items.push({ product: prod._id, qty: it.qty, price });
@@ -46,7 +53,6 @@ export const checkoutFromCartService = async (
   return order;
 };
 
-
 export const getOrderByIdService = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) return null;
   return Order.findById(id).populate("items.product");
@@ -54,15 +60,21 @@ export const getOrderByIdService = async (id: string) => {
 
 export const getOrdersByUserService = async (userId: string) => {
   if (!Types.ObjectId.isValid(userId)) return [];
-  return Order.find({ user: userId }).sort({ createdAt: -1 }).populate("items.product");
+  return Order.find({ user: userId })
+    .sort({ createdAt: -1 })
+    .populate("items.product");
 };
 
-
-export const updateOrderService = async (id: string, update: UpdateOrderBody) => {
+export const updateOrderService = async (
+  id: string,
+  update: UpdateOrderBody
+) => {
   if (!Types.ObjectId.isValid(id)) return null;
-  return Order.findByIdAndUpdate(id, update, { new: true, runValidators: true });
+  return Order.findByIdAndUpdate(id, update, {
+    new: true,
+    runValidators: true,
+  });
 };
-
 
 export const cancelOrderService = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) return null;
@@ -79,15 +91,19 @@ export const cancelOrderService = async (id: string) => {
   return ord;
 };
 
-
 export const listOrderedProductsService = async (userId: string) => {
   if (!Types.ObjectId.isValid(userId)) return [];
-  const orders = await Order.find({ user: userId }).select("items").populate("items.product");
+  const orders = await Order.find({ user: userId })
+    .select("items")
+    .populate("items.product");
   return orders.flatMap((o) => o.items);
 };
 
-
-export const totalExpensesService = async (userId: string, from?: Date, to?: Date) => {
+export const totalExpensesService = async (
+  userId: string,
+  from?: Date,
+  to?: Date
+) => {
   if (!Types.ObjectId.isValid(userId)) return 0;
 
   const match: any = { user: new Types.ObjectId(userId) };

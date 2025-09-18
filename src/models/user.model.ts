@@ -16,7 +16,7 @@ export const userSchema = new Schema<IUserModel>(
     },
     role: {
       ref: "Role",
-      type: Schema.Types.ObjectId ,
+      type: Schema.Types.ObjectId,
     },
     isDeleted: {
       type: Boolean,

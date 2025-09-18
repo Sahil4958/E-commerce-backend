@@ -17,7 +17,6 @@ userRouter.post(
   registerUser
 );
 
-
 userRouter.post(
   "/login",
   validate({ body: loginValidateSchema }),

@@ -2,11 +2,14 @@ import { Response } from "express";
 import { ZodError } from "zod";
 import { apiResponse } from "./apiResponse";
 
-export const handleError = async (res:Response,error:unknown):Promise<void>=>{
-    if(error instanceof ZodError){
-        apiResponse(res,400,"Validation Error",error.issues);
-        return;
-    }
-    apiResponse(res,500,(error as Error)?.message || "Something went wrong");
+export const handleError = async (
+  res: Response,
+  error: unknown
+): Promise<void> => {
+  if (error instanceof ZodError) {
+    apiResponse(res, 400, "Validation Error", error.issues);
     return;
-}
+  }
+  apiResponse(res, 500, (error as Error)?.message || "Something went wrong");
+  return;
+};

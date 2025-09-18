@@ -25,8 +25,6 @@ orderRouter.post(
   checkoutFromCart
 );
 
-
-
 orderRouter.get("/:id", authMiddleware, getOrder);
 orderRouter.get("/orders", authMiddleware, getMyOrders);
 
