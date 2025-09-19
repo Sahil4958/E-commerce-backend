@@ -58,7 +58,7 @@ export const listProducts = async (req: Request, res: Response) => {
       itemsPerPage:
         Number.isFinite(itemsPerPage) && itemsPerPage > 0 ? itemsPerPage : 10,
       sortField,
-      sortOrder, // defaults applied in paginationObject
+      sortOrder,
     });
 
     return apiResponse(res, StatusCodes.OK, "Product list fetched", result);

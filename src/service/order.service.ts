@@ -33,9 +33,15 @@ export const checkoutFromCartService = async (
       isDeleted: { $ne: true },
     });
     if (!prod) throw new Error("Product not found or deleted");
-    const price = prod.price;
-    items.push({ product: prod._id, qty: it.qty, price });
-    total += price * it.qty;
+
+    if (prod.stock < it.qty)
+      throw new Error(`Insufficient stock for ${prod.name}`);
+
+    prod.stock -= it.qty;
+    await prod.save();
+
+    items.push({ product: prod._id, qty: it.qty, price: prod.price });
+    total += prod.price * it.qty;
   }
 
   const expectedDelivery = computeExpectedDelivery(extra?.shippingMethod);
@@ -75,20 +81,40 @@ export const updateOrderService = async (
     runValidators: true,
   });
 };
+export const updateOrderStatusService = async (
+  orderId: string,
+  status: "placed" | "shipped" | "delivered" | "cancelled"
+): Promise<IOrderModel | null> => {
+  if (!Types.ObjectId.isValid(orderId)) return null;
 
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true, runValidators: true }
+  );
+
+  return order;
+};
 export const cancelOrderService = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) return null;
-  const ord = await Order.findById(id);
-  if (!ord) return null;
-
+  const order = await Order.findById(id);
+  if (!order) return null;
   const now = new Date();
-  if (ord.expectedDelivery && now >= new Date(ord.expectedDelivery)) {
+  if (order.expectedDelivery && now >= new Date(order.expectedDelivery))
     throw new Error("Cannot cancel on/after expected delivery date");
+  if (order.status === "placed") {
+    for (const item of order.items) {
+      const prod = await Product.findById(item.product._id);
+      if (prod) {
+        prod.stock += item.qty;
+        await prod.save();
+      }
+    }
   }
 
-  ord.status = "cancelled";
-  await ord.save();
-  return ord;
+  order.status = "cancelled";
+  await order.save();
+  return order;
 };
 
 export const listOrderedProductsService = async (userId: string) => {
@@ -117,6 +143,6 @@ export const totalExpensesService = async (
     { $match: match },
     { $group: { _id: null, total: { $sum: "$totalAmount" } } },
   ]);
-
   return agg[0]?.total ?? 0;
 };
+

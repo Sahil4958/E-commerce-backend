@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { User, IUserModel } from "../models/user.model";
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
+import { IRole } from "../interface/role.interface";
 
 export const createUserService = async (
   data: Partial<IUserModel>
@@ -46,7 +47,7 @@ export const loginUserService = async (email: string, password: string) => {
       id: (user._id as Types.ObjectId).toString(),
       name: user.name,
       email: user.email,
-      role: (user.role as any)?.role,
+      role: (user.role as IRole).role,
     },
   };
 };

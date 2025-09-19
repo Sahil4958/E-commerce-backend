@@ -4,7 +4,7 @@ export const messages = {
   USER_ERR: "Failed to create user due to an unknown error.",
   EXISTING_USER: "User already exists.",
   USER_NOT_FOUND: "User not found.",
-  USER_FOUND: "USer found",
+  USER_FOUND: "USer fetched successfully.",
   INCORRECT_PASSWORD: "Incorrect password. Please try again.",
 
   TOKENLESS_ERROR: "Authentication token not provided.",
@@ -12,7 +12,7 @@ export const messages = {
   USER_UPDATED: "User Updated  Successfully",
   USER_LIST: "User list fetched Successfully",
   USER_DELETED: "User Deleted Successfully",
-
+  INVALID_USER: "User not authenticated",
   UNAUTHORIZED: "You are not authorized to access this resource.",
   INTERNAL_SERVER_ERROR: "Internal server error.",
   INVALID_PARAMS: "Invalid route parameters",
@@ -20,9 +20,33 @@ export const messages = {
   INVALID_BODY: "Invalid request body",
   VALIDATION_ERROR: "Internal server error during validation ",
 
+  PROFILE_FETCHED: "Profile fetched successfully.",
+  PROFILE_UPDATED: "Profile updated successfully.",
+
   PRODUCT_CREATED: "Product created successfully.",
   PRODUCT_UPDATED: "Product updated successfully.",
   PRODUCT_DELETED: "Product deleted successfully.",
   PRODUCT_NOT_FOUND: "Product not found.",
   PRODUCT_LIST_FETCHED: "Product list fetched successfully.",
+
+  CART_FETCHED: "Cart fetched successfully.",
+  CART_UPDATED: "Cart updated successfully.",
+  CART_ITEM_REMOVED: "Item removed from cart successfully.",
+  CART_CLEARED: "Cart cleared successfully.",
+  ITEM_ADDED_TO_CART: "Item added to cart successfully.",
+
+  ORDER_PLACED: "Order placed successfully.",
+  ORDER_NOT_FOUND: "Order not found.",
+  ORDER_FETCHED: "Order fetched successfully.",
+  ORDER_UPDATED: "Order updated successfully.",
+  ORDER_CANCELLED: "Order cancelled successfully.",
+  ORDER_STATUS_UPDATED: "Order status updated successfully.",
+  ADMIN_ACCESS_ONLY: "Only admin can update it.",
+  UNOTHORUZED_UPDATE: "You cannot update this order now",
+  ORDERED_PRODUCTS: "Ordered products fetched successfully.",
+  ORDER_EXPENSE: "Total expenses fetched successfully.",
+
+  GLOBAL_METRICS: "Global metrics fetched successfully.",
+  SALES_REPORT: "Sales report generated successfully.",
+  ORDER_STATUSES: "Order statuses fetched successfully.",
 };

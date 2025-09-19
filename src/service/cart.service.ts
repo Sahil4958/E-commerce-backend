@@ -14,30 +14,60 @@ export const addToCartService = async (
   productId: string,
   qty = 1
 ) => {
-  if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId))
+  if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId)) {
     throw new Error("Invalid ids");
+  }
+
   const prod = await Product.findOne({
     _id: productId,
     isDeleted: { $ne: true },
   });
   if (!prod) throw new Error("Product not found");
+
+  if (prod.stock <= 0) {
+    throw new Error("Product is out of stock");
+  }
+
+  if (qty > prod.stock) {
+    throw new Error(`Only ${prod.stock} items are available in stock`);
+  }
+
   const price = prod.price;
 
-  const pushed = await Cart.findOneAndUpdate(
-    { user: userId, "items.product": { $ne: productId } },
-    {
-      $push: { items: { product: productId, qty, price } },
-      $currentDate: { updatedAt: true },
-    },
-    { new: true }
-  );
-  if (pushed) return pushed;
+  let cart = await Cart.findOne({ user: userId });
 
-  return Cart.findOneAndUpdate(
-    { user: userId, "items.product": productId },
-    { $inc: { "items.$.qty": qty }, $currentDate: { updatedAt: true } },
-    { new: true, upsert: true, setDefaultsOnInsert: true }
+  if (!cart) {
+    cart = await Cart.create({
+      user: userId,
+      items: [{ product: productId, qty, price }],
+    });
+    return cart;
+  }
+
+  const existingItem = cart.items.find(
+    (item) => item.product.toString() === productId
   );
+
+  if (existingItem) {
+    const totalQty = existingItem.qty + qty;
+
+    if (totalQty > prod.stock) {
+      throw new Error(
+        `You already have ${existingItem.qty} in cart. Only ${
+          prod.stock - existingItem.qty
+        } more can be added.`
+      );
+    }
+
+    existingItem.qty = totalQty;
+  } else {
+    cart.items.push({ product: new Types.ObjectId(productId), qty, price });
+  }
+
+  cart.updatedAt = new Date();
+  await cart.save();
+
+  return cart;
 };
 
 export const updateCartItemQtyService = async (
@@ -47,6 +77,15 @@ export const updateCartItemQtyService = async (
 ) => {
   if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId))
     throw new Error("Invalid ids");
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  if (qty > product.stock) {
+    throw new Error(`Only ${product.stock} items are available in stock`);
+  }
   if (qty <= 0) {
     return Cart.findOneAndUpdate(
       { user: userId },
@@ -64,12 +103,19 @@ export const updateCartItemQtyService = async (
   );
 };
 
+
+
 export const removeFromCartService = async (
   userId: string,
   productId: string
 ) => {
   if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId))
     throw new Error("Invalid ids");
+
+
+  const cart = await Cart.findOne({ user: userId, "items.product": productId });
+  if (!cart) throw new Error("Item not found in cart");
+
   return Cart.findOneAndUpdate(
     { user: userId },
     {

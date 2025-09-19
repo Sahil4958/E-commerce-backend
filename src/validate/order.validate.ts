@@ -67,6 +67,9 @@ export const updateOrderBody = z.object({
     })
     .optional(),
 });
+export const updateOrderStatusBody = z.object({
+  status: z.enum(["placed", "shipped", "delivered", "cancelled"]),
+});
 
 export const expensesQuery = z.object({
   from: z.string().optional(),
@@ -75,4 +78,5 @@ export const expensesQuery = z.object({
 
 export type CheckoutBody = z.infer<typeof checkoutBody>;
 export type UpdateOrderBody = z.infer<typeof updateOrderBody>;
+export type UpdateOrderStatusBody = z.infer<typeof updateOrderStatusBody>;
 export type ExpensesQuery = z.infer<typeof expensesQuery>;

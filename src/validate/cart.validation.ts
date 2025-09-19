@@ -7,7 +7,7 @@ export const addToCartBody = z.object({
 
 export const updateQtyBody = z.object({
   productId: z.string().min(1, "Product ID is required"),
-  qty: z.coerce.number().int(),
+  qty: z.coerce.number().int(), // allow 0 to remove
 });
 
 export const removeItemBody = z.object({

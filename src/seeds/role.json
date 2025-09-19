@@ -1,8 +1,8 @@
 [
-  {
-    "role": "ADMIN"
-  },
-  {
-    "role": "USER"
-  }
+    {
+        "role" : "ADMIN"
+    },
+    {
+        "role" : "USER"
+    }
 ]

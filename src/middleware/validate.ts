@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodType } from "zod";
+import { ZodSchema, ZodType } from "zod";
 import { apiResponse } from "../utils/apiResponse";
 import { StatusCodes } from "http-status-codes";
 import { messages } from "../utils/message";
@@ -58,6 +58,22 @@ export const validate = (schemas: {
         StatusCodes.INTERNAL_SERVER_ERROR,
         messages.VALIDATION_ERROR
       );
+    }
+  };
+};
+
+export const validateQuery = (schema: ZodSchema) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const validated = schema.parse(req.query);
+      (req as any).validatedQuery = validated; // ✅ add to req
+      next();
+    } catch (err) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Validation error",
+        error: err instanceof Error ? err.message : err,
+      });
     }
   };
 };
