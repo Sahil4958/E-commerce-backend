@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const user_router_1 = __importDefault(require("./routers/user.router"));
+const product_router_1 = __importDefault(require("./routers/product.router"));
+const cart_router_1 = __importDefault(require("./routers/cart.router"));
+const order_router_1 = __importDefault(require("./routers/order.router"));
+const userDashboard_router_1 = __importDefault(require("./routers/userDashboard.router"));
+const adminDashboard_router_1 = __importDefault(require("./routers/adminDashboard.router"));
+const userDashboard_router_2 = __importDefault(require("./routers/userDashboard.router"));
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.use("/api/v1/users", user_router_1.default);
+app.use("/api/v1/products", product_router_1.default);
+app.use("/api/v1/carts", cart_router_1.default);
+app.use("/api/v1/orders", order_router_1.default);
+app.use("/api/v1/dashboard", userDashboard_router_1.default);
+app.use("/api/v1/admin", adminDashboard_router_1.default);
+app.use("/api/v1/user", userDashboard_router_2.default);
+exports.default = app;
