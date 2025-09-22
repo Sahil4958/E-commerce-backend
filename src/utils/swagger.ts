@@ -15,8 +15,8 @@ const options = {
         url: "http://localhost:5002",
       },
       {
-        url: "https://e-commerce-backend-1-konv.onrender.com/"
-      }
+        url: "https://e-commerce-backend-1-konv.onrender.com",
+      },
     ],
   },
   apis: ["./src/**/*.ts"],
