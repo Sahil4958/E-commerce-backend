@@ -1,4 +1,4 @@
 export interface IRole {
- role: string;
- isDeleted : boolean
+  role: string;
+  isDeleted: boolean;
 }
