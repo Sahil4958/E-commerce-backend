@@ -145,4 +145,3 @@ export const totalExpensesService = async (
   ]);
   return agg[0]?.total ?? 0;
 };
-

@@ -12,5 +12,7 @@ export const getUserProfileService = async (userId: string) => {
 };
 
 export const updateUserProfileService = async (userId: string, data: any) => {
-  return User.findByIdAndUpdate(userId, data, { new: true }).select("-password");
+  return User.findByIdAndUpdate(userId, data, { new: true }).select(
+    "-password"
+  );
 };

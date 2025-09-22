@@ -1,4 +1,7 @@
-import { productZodSchema, updateProductZodSchema } from "./../validate/product.validate";
+import {
+  productZodSchema,
+  updateProductZodSchema,
+} from "./../validate/product.validate";
 import express from "express";
 import { validate } from "../middleware/validate";
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -276,7 +279,6 @@ productRouter.post(
 
 productRouter.get("/list", authMiddleware, listProducts);
 
-
 /**
  * @swagger
  * /api/v1/products/{id}:
@@ -333,7 +335,6 @@ productRouter.get("/list", authMiddleware, listProducts);
  */
 
 productRouter.get("/:id", authMiddleware, getProductById);
-
 
 /**
  * @swagger
@@ -504,19 +505,14 @@ productRouter.get("/:id", authMiddleware, getProductById);
  *                   example: []
  */
 
-
-
-
 productRouter.patch(
   "/update/:id",
   authMiddleware,
   authorization,
-  upload.array("images", 5),             
+  upload.array("images", 5),
   validate({ body: updateProductZodSchema }),
   updateProduct
 );
-
-
 
 /**
  * @swagger
@@ -652,11 +648,11 @@ productRouter.patch(
  *                   example: []
  */
 
-
 productRouter.delete(
   "/delete/:id",
-  authMiddleware,   
-    authorization,
-    deleteProduct)
+  authMiddleware,
+  authorization,
+  deleteProduct
+);
 
 export default productRouter;

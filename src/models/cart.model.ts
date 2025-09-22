@@ -1,4 +1,3 @@
-
 import { Schema, model, Document } from "mongoose";
 import { ICart, ICartItem } from "../interface/cart.interface";
 

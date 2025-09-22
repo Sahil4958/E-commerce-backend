@@ -29,8 +29,6 @@ const userDashboardRouter = express.Router();
  *           example: []
  */
 
-
-
 /**
  * @swagger
  * /api/v1/user/orders:

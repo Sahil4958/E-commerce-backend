@@ -103,15 +103,12 @@ export const updateCartItemQtyService = async (
   );
 };
 
-
-
 export const removeFromCartService = async (
   userId: string,
   productId: string
 ) => {
   if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId))
     throw new Error("Invalid ids");
-
 
   const cart = await Cart.findOne({ user: userId, "items.product": productId });
   if (!cart) throw new Error("Item not found in cart");
